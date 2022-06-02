@@ -1,0 +1,22 @@
+{
+  "name": "radon",
+  "version": "1.0.0",
+  "description": "It is an amazing package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kothari-Ak/radon.git"
+  },
+  "author": "Anjali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kothari-Ak/radon/issues"
+  },
+  "homepage": "https://github.com/kothari-Ak/radon#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
