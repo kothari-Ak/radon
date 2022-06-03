@@ -1,21 +1,30 @@
 const express = require('express');
-const externalModule = require('../logger/logger')
-const dateModule=require('../helper')
-const caseModule=require('../formatter')
-
 const router = express.Router();
 
+router.post("/players", function(req, res){
 
-router.get('/test-me', function (req, res){
-     externalModule.welcome()
-     dateModule.printDate()
-     dateModule.printMonth()
-     dateModule.getBatchInfo()
-     caseModule.trim()
-     caseModule.changeToLowerCase()
-     caseModule.changeToUpperCase()
-     res.send('my first ever api')
-})
+   
+   let explayer= req.body
+   let explayerName = explayername
+   let isNameRepeat=false
+
+  for (let i=0;i<players.length;i++){
+     if(players[i].name==explayerName){
+        isNameRepeat=true;
+        break;
+     }
+  }
+  
+  if(isNameRepeat){
+     res.send("This is already existed")
+  }
+  else{
+     players.push(explayer)
+  }  res.send(players)})
+
+   
+   players.push(data)
+   res.send( { data : players,status :true } )
+
 
 module.exports = router;
-// adding this comment for no reason
