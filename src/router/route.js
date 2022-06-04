@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 router.post("/players", function(req, res){
-
-   
+   let players=[]
    let explayer= req.body
-   let explayerName = explayername
+   let explayerName = explayer.name
    let isNameRepeat=false
 
   for (let i=0;i<players.length;i++){
@@ -20,11 +19,7 @@ router.post("/players", function(req, res){
   }
   else{
      players.push(explayer)
-  }  res.send(players)})
-
-   
-   players.push(data)
-   res.send( { data : players,status :true } )
-
-
+   res.send(players)}
+  })
 module.exports = router;
+
