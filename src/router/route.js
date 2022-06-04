@@ -1,14 +1,40 @@
 const express = require('express');
 const router = express.Router();
+let players = [{
+      "name":"Anjali",
+      "dob":"7/11/1999",
+      "gender":"male",
+      "city":"jalandhar",
+      "sports":[
+         "swimmimg"
+      ]},
+
+      {
+            "name":"Krishna",
+            "dob":"7/11/1999",
+            "gender":"male",
+            "city":"jalandhar",
+            "sports":[
+               "swimmimg"
+      ]},
+      
+      {
+         "name":"Shree",
+         "dob":"7/11/1999",
+         "gender":"male",
+         "city":"jalandhar",
+         "sports":[
+            "swimmimg"
+         ]},
+      ]
+
 
 router.post("/players", function(req, res){
-   let players=[]
    let explayer= req.body
-   let explayerName = explayer.name
    let isNameRepeat=false
 
   for (let i=0;i<players.length;i++){
-     if(players[i].name==explayerName){
+     if(players[i].name==explayer.name){
         isNameRepeat=true;
         break;
      }
@@ -19,7 +45,6 @@ router.post("/players", function(req, res){
   }
   else{
      players.push(explayer)
-   res.send(players)}
+   res.send({data:players,status:true})}
   })
 module.exports = router;
-
