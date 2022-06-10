@@ -1,31 +1,14 @@
 const mongoose = require('mongoose');
 
+const ObjectId=mongoose.Schema.Types.ObjectId
+
 const bookSchema = new mongoose.Schema( {
-    bookName: {
-        type:String,
-        required:true
-    },
-    authorName: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        enum: ["Fiction", "Thriller", "Mystery","Fantasy","Frame"] //"falana" will give an error
-    },
-    year:String
-    // isIndian: Boolean,
-    // parentsInfo: {
-    //     motherName: String,
-    //     fatherName: String,
-    //     siblingName: String
-    // },
-    // cars: [ String  ]
+  name:String,
+  author_id:{type:String,ref:"newAuthor"},
+  price: Number,
+  ratings:String,
+  publisher_id:{type:String,ref:"newPublisher"}
+
 }, { timestamps: true });
 
-module.exports = mongoose.model('Book', bookSchema) //books
-
-
-
-// String, Number
-// Boolean, Object/json, array
+module.exports = mongoose.model('newBook', bookSchema) 
