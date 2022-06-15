@@ -3,9 +3,7 @@ const userModel = require("../models/userModel");
 
 
 const createUser = async function (req, res) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
+ 
   let data = req.body;
   let savedData = await userModel.create(data);
   // console.log(abcd.newAtribute);
@@ -27,7 +25,7 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "radon",
+      batch: "thorium",
       organisation: "FunctionUp",
     },
     "functionup-radon"
@@ -38,7 +36,8 @@ const loginUser = async function (req, res) {
 
 const getUserData = async function (req, res) {
   let token = req.headers["x-Auth-token"];
-  if (!token) token = req.headers["x-auth-token"];
+  if (!token) 
+  token = req.headers["x-auth-token"];
 
   //If no token is present in the request header return error
   if (!token) return res.send({ status: false, msg: "token must be present" });
