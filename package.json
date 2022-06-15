@@ -90,6 +90,7 @@
     "is-typedarray": "^1.0.0",
     "is-yarn-global": "^0.3.0",
     "json-buffer": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
     "kareem": "^2.3.5",
     "keyv": "^3.1.0",
     "latest-version": "^5.1.0",
@@ -193,5 +194,6 @@
   "bugs": {
     "url": "https://github.com/kothari-Ak/radon/issues"
   },
-  "homepage": "https://github.com/kothari-Ak/radon#readme"
+  "homepage": "https://github.com/kothari-Ak/radon#readme",
+  "devDependencies": {}
 }

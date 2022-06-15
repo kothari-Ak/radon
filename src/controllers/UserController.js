@@ -1,64 +1,116 @@
-const userModel= require("../models/userModel")
-const productModel=require("../models/productModel")
-const orderModel=require("../models/orderModel")
-const midware=require("../middleWare/midware")
-
-const usercreated=async function (req,res){
-    res.send({msg:"request is missing a mandatory header"})
-}
-
-const orderpurchase=async function (req,res){
-   
-}
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
 
 
+const createUser = async function (req, res) {
+  //You can name the req, res objects anything.
+  //but the first parameter is always the request 
+  //the second parameter is always the response
+  let data = req.body;
+  let savedData = await userModel.create(data);
+  // console.log(abcd.newAtribute);
+  res.send({ msg: savedData });
+};
 
-// problem 1
-const AuthorCreated= async function (req, res) {
-    let author=req.body
-    let createdAuthor= await authorModel.create(author)
-    res.send({msg: createdAuthor})  
-}
-// problem 2
-const createProduct= async function(req,res){
-    let product=req.body
-    let pro=await productModel.create(product)
-    res.send({msg:product})
-}
+const loginUser = async function (req, res) {
+  let userName = req.body.emailId;
+  let password = req.body.password;
+
+  let user = await userModel.findOne({ emailId: userName, password: password });
+  if (!user)
+    return res.send({
+      status: false,
+      msg: "username or the password is not corerct",
+    });
+
+
+  let token = jwt.sign(
+    {
+      userId: user._id.toString(),
+      batch: "radon",
+      organisation: "FunctionUp",
+    },
+    "functionup-radon"
+  );
+  res.setHeader("x-auth-token", token);
+  res.send({ status: true, token: token });
+};
+
+const getUserData = async function (req, res) {
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
+
+  //If no token is present in the request header return error
+  if (!token) return res.send({ status: false, msg: "token must be present" });
+
+  console.log(token);
+
+  let decodedToken = jwt.verify(token, "functionup-radon");
+  console.log(decodedToken)
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" });
+  let userId = req.params.userId;
+  let userDetails = await userModel.findById(userId);
+  if (!userDetails)
+    return res.send({ status: false, msg: "No such user exists" });
+
+  res.send({ status: true, data: userDetails });
+};
+
+const updateUser = async function (req, res) {
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
+
+  //If no token is present in the request header return error
+  if (!token) return res.send({ status: false, msg: "token must be present" });
+console.log(token);
+  
+ let decodedToken = jwt.verify(token, "functionup-radon");
+  console.log(decodedToken)
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" });
+ 
+  let userId = req.params.userId;
+  let user = await userModel.findById(userId);
+  //Return an error if no user with the given id exists in the db
+  if (!user) {
+    return res.send("No such user exists");
+  }
+
+  let userData = req.body;
+  let updatedUser = await userModel.updateMany({$set:userData})
+  res.send({ status: updatedUser, data: updatedUser });
+};
 
 
 
+const deleteUser = async function (req, res) {
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
 
-//problem 3
-const createbookbydetails=async function(req,res){
-    let Book=req.body
- //problem 3(a)
-    if(!Book.author_id) {
-        res.send({msg:"author_id is required"})
-    }  
-//problem 3(b)
-    let AuthorChecked=await authorModel.findById(Book.author_id)
-    if(!AuthorChecked){
-        res.send({msg:"author is not present"})
+  //If no token is present in the request header return error
+  if (!token) return res.send({ status: false, msg: "token must be present" });
+
+  console.log(token);
+  
+  let decodedToken = jwt.verify(token, "functionup-radon");
+  console.log(decodedToken)
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" });
+ 
+    let userId = req.params.userId;
+    let user = await userModel.findById(userId);
+    //Return an error if no user with the given id exists in the db
+    if (!user) {
+      return res.send("No such user exists");
     }
-//problem 3(c)
-if(!Book.publisher_id){
-   res.send({msg:"publisher_id is required"})
+    
+    let deletedUser = await userModel.updateOne({age:12},{$set:{isDeleted:true}})
+    res.send({ data: deletedUser })
 }
-//problem 3(d)
-let PublisherChecked=await publisherModel.findById(Book.publisher_id)
-    if(!PublisherChecked){
-    res.send({msg:"publisher is not present"})
-}   
-}
-//problem 4
-const getBooksdata=async function(req,res){
-    let getBook=await bookModel.find().populate('author_id').populate('publisher_id')
-    res.send({msg:getBook})
-}
-module.exports.orderpurchase=orderpurchase
-module.exports.usercreated=usercreated  
-module.exports.getBooksdata=getBooksdata
-module.exports.createbookbydetails=createbookbydetails
-module.exports.AuthorCreated=AuthorCreated
-module.exports.createProduct=createProduct
+
+module.exports.deleteUser=deleteUser
+module.exports.createUser = createUser;
+module.exports.getUserData = getUserData;
+module.exports.updateUser = updateUser;
+module.exports.loginUser = loginUser;
