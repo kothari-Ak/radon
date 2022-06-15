@@ -1,64 +1,60 @@
 const userModel= require("../models/userModel")
 const productModel=require("../models/productModel")
 const orderModel=require("../models/orderModel")
-const midware=require("../middleWare/midware")
 
-const usercreated=async function (req,res){
-    res.send({msg:"request is missing a mandatory header"})
+
+
+const createUser = async function(req, res) {
+  let userDetails = req.body
+  userDetails.isFreeAppUser = req.appTypeFree
+  
+  let userCreated = await userModel.create(userDetails)
+  res.send({status: true, data: userCreated})
 }
 
-const orderpurchase=async function (req,res){
-   
+const createProduct = async function(req, res) {
+  let productDetails = req.body
+  let productCreated = await productModel.create(productDetails)
+  res.send({status: true, data: productCreated})
+}
+
+const createOrder = async function(req, res) {
+  let orderDetails = req.body
+  let userId = orderDetails.userId
+
+  let user = await userModel.findById(userId)
+  if(!user) {
+      return res.send({status: false, message: "user doesnt exist"})
+  }
+
+  let productId = orderDetails.productId
+  let product = await productModel.findById(productId)
+  if(!product) {
+      return res.send({status: false, message: "product doesnt exist"})
+  }
+  
+  //Scenario 1 : Paid app and user balance is greater than or equal to product price
+  if(!req.appTypeFree && user.balance >= product.price) {
+      user.balance = user.balance - product.price
+      await user.save()
+
+      orderDetails.amount = product.price
+      orderDetails.isFreeAppUser = false
+      let orderCreated = await orderModel.create(orderDetails)
+      return res.send({status: true, data :orderCreated})
+  } else if(!req.appTypeFree) {
+  //Scenario 2 : Paid app and user balance is less than product price
+      return res.send({status: false, message:"User deosnt have sufficient balance"})
+  } else {
+  //Scenario 3 : Free app
+      orderDetails.amount = 0
+      orderDetails.isFreeAppUser = true
+      let orderCreated = await orderModel.create(orderDetails)
+      res.send({status: true, data: orderCreated})
+  }
 }
 
 
-
-// problem 1
-const AuthorCreated= async function (req, res) {
-    let author=req.body
-    let createdAuthor= await authorModel.create(author)
-    res.send({msg: createdAuthor})  
-}
-// problem 2
-const createProduct= async function(req,res){
-    let product=req.body
-    let pro=await productModel.create(product)
-    res.send({msg:product})
-}
-
-
-
-
-//problem 3
-const createbookbydetails=async function(req,res){
-    let Book=req.body
- //problem 3(a)
-    if(!Book.author_id) {
-        res.send({msg:"author_id is required"})
-    }  
-//problem 3(b)
-    let AuthorChecked=await authorModel.findById(Book.author_id)
-    if(!AuthorChecked){
-        res.send({msg:"author is not present"})
-    }
-//problem 3(c)
-if(!Book.publisher_id){
-   res.send({msg:"publisher_id is required"})
-}
-//problem 3(d)
-let PublisherChecked=await publisherModel.findById(Book.publisher_id)
-    if(!PublisherChecked){
-    res.send({msg:"publisher is not present"})
-}   
-}
-//problem 4
-const getBooksdata=async function(req,res){
-    let getBook=await bookModel.find().populate('author_id').populate('publisher_id')
-    res.send({msg:getBook})
-}
-module.exports.orderpurchase=orderpurchase
-module.exports.usercreated=usercreated  
-module.exports.getBooksdata=getBooksdata
-module.exports.createbookbydetails=createbookbydetails
-module.exports.AuthorCreated=AuthorCreated
-module.exports.createProduct=createProduct
+module.exports.createOrder = createOrder
+module.exports.createProduct = createProduct
+module.exports.createUser = createUser
