@@ -1,7 +1,6 @@
 {
   "name": "radon",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "dependencies": {
     "abbrev": "^1.1.1",
@@ -212,5 +211,6 @@
   "bugs": {
     "url": "https://github.com/kothari-Ak/radon/issues"
   },
-  "homepage": "https://github.com/kothari-Ak/radon#readme"
+  "homepage": "https://github.com/kothari-Ak/radon#readme",
+  "description": ""
 }

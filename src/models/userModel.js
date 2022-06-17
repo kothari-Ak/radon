@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema( {
     firstName: String,
     lastName: String,
     mobile: {
-        type: String,
+        type: Number,
 
         required: true
     },
@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema( {
     isDeleted:{
         type:Boolean,default:false
     },
+    posts:{type:[],default:[]},
     age: Number,
 }, { timestamps: true });
 
