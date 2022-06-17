@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js"
   },
-  "author": "",
+  "author": "Anjali",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -16,6 +16,14 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^6.2.3",
-    "nodemon": "^2.0.15"
-  }
+    "nodemon": "^2.0.16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabihak89/radon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sabihak89/radon/issues"
+  },
+  "homepage": "https://github.com/sabihak89/radon#readme"
 }
