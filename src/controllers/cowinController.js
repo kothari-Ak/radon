@@ -78,8 +78,44 @@ let getOtp = async function (req, res) {
     }
 }
 
+let getVaccSessions=async function(req,res)
+{
+    let id = req.query.district_id
+    let date= req.query.date
+    let vaccSess = {
+        method: "get",
+        url: `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${id}&date=${date}`
+    }
+    let result = await axios(vaccSess);
+    console.log(result)
+    let data = result.data
+    res.status(200).send({ msg: data, status: true })
+}
 
+let weatherData= async function(req,res){
+    try{
+        let id=req.query.appid
+    let qr=req.query.q
+    let londonweather={
+        method:"get",
+        url:`http://api.openweathermap.org/data/2.5/weather?q=${qr}&appid=${id}`
+    }
+    let result=await axios(londonweather)
+    console.log(result)
+    let data=result.data
+    res.status(200).send({msg:data,status:true})}
+
+    catch(err)
+    {
+        res.status(500).send(err.message)
+    }
+}
+
+
+
+module.exports.weatherData = weatherData
 module.exports.getStates = getStates
 module.exports.getDistricts = getDistricts
 module.exports.getByPin = getByPin
 module.exports.getOtp = getOtp
+module.exports.getVaccSessions = getVaccSessions 
